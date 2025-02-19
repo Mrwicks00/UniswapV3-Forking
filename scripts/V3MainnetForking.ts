@@ -1,11 +1,11 @@
 import { ethers } from "hardhat";
 const helpers = require("@nomicfoundation/hardhat-network-helpers");
 
-// Convert addresses to checksum format
-const UniswapV3Address = ethers.getAddress("0xC36442b4a4522E871399CD717aBDD847Ab11FE88");
-const usdcAddress = ethers.getAddress("0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eb48");
-const wethAddress = ethers.getAddress("0xC02aaa39b223FE8D0A0e5C4F27eAD9083C756Cc2");
-const usdcWhale = ethers.getAddress("0x55fe002aeff02f77364de339a1292923a15844b8");
+// Addresses
+const UniswapV3Address = "0xC36442b4a4522E871399CD717aBDD847Ab11FE88";
+const usdcAddress = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
+const wethAddress = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+const usdcWhale = "0xf584f8728b874a6a5c7a8d4d387c9aae9172d621";
 
 async function main() {
     console.log("USDC Address:", usdcAddress);
@@ -16,6 +16,10 @@ async function main() {
     // Impersonate USDC Whale
     await helpers.impersonateAccount(usdcWhale);
     const impersonatedSigner = await ethers.getSigner(usdcWhale);
+
+    // Fund impersonated account with ETH for gas fees
+    await helpers.setBalance(usdcWhale, ethers.parseUnits("1", 18)); // Provide 1 ETH
+    console.log("ETH balance set for impersonated account!");
 
     // Get contract instances
     const usdc = await ethers.getContractAt("IERC20", usdcAddress);
